@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>commit-assistant Docs</title>
+  <style>
+    :root {
+      --bg-1: #f7f5ef;
+      --bg-2: #e2eef8;
+      --ink: #1f2a37;
+      --muted: #4b5563;
+      --accent: #0d9488;
+      --accent-2: #0284c7;
+      --panel: rgba(255, 255, 255, 0.88);
+      --line: rgba(31, 42, 55, 0.14);
+      --shadow: 0 14px 42px rgba(8, 38, 62, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "IBM Plex Sans", "Noto Sans SC", "Source Han Sans SC", "PingFang SC", sans-serif;
+      background:
+        radial-gradient(circle at 10% 12%, #fff7d6 0%, transparent 42%),
+        radial-gradient(circle at 88% 9%, #d7f2ee 0%, transparent 36%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 28px 20px 44px;
+      animation: reveal 500ms ease-out;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .switch {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12);
+    }
+
+    .switch button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .switch button.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4.2vw, 44px);
+      letter-spacing: 0.2px;
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(15px, 2.2vw, 18px);
+      line-height: 1.6;
+      max-width: 760px;
+    }
+
+    .grid {
+      margin-top: 18px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .card {
+      grid-column: span 12;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow);
+      animation: rise 420ms ease both;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.62;
+    }
+
+    pre {
+      margin: 10px 0 0;
+      background: #0d1b2a;
+      color: #ecfeff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.56;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .footer {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (min-width: 860px) {
+      .card--half { grid-column: span 6; }
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topbar">
+      <div class="badge" id="badge">Codex Skill Documentation</div>
+      <div class="switch" role="tablist" aria-label="Language switch">
+        <button id="btn-zh" class="active" type="button" role="tab" aria-selected="true">中文</button>
+        <button id="btn-en" type="button" role="tab" aria-selected="false">English</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1 id="title">commit-assistant</h1>
+      <p class="subtitle" id="subtitle"></p>
+    </section>
+
+    <section class="grid">
+      <article class="card card--half">
+        <h2 id="install-title"></h2>
+        <p id="install-desc"></p>
+        <pre id="install-code"></pre>
+      </article>
+
+      <article class="card card--half">
+        <h2 id="usage-title"></h2>
+        <p id="usage-desc"></p>
+        <pre id="usage-code"></pre>
+      </article>
+
+      <article class="card">
+        <h2 id="standards-title"></h2>
+        <p id="standards-desc"></p>
+        <ul id="standards-list"></ul>
+      </article>
+
+      <article class="card">
+        <h2 id="notes-title"></h2>
+        <p id="notes-desc"></p>
+        <ul id="notes-list"></ul>
+      </article>
+    </section>
+
+    <div class="footer" id="footer"></div>
+  </main>
+
+  <script>
+    const I18N = {
+      zh: {
+        badge: "Codex Skill 文档",
+        title: "commit-assistant",
+        subtitle: "基于已暂存 diff、用户意图和会话约束，自动生成 Conventional Commit 与开源风格提交描述（Why / What changed / Impact）。",
+        installTitle: "安装",
+        installDesc: "将仓库放到本地 skill 目录，确保脚本有执行权限。",
+        installCode: "mkdir -p ~/.codex/skills\ncp -R commit-assistant ~/.codex/skills/\nchmod +x ~/.codex/skills/commit-assistant/scripts/auto-commit.sh",
+        usageTitle: "快速使用",
+        usageDesc: "先用 dry-run 预览提交信息，确认后再正式提交并推送。",
+        usageCode: "scripts/auto-commit.sh --dry-run --no-push \\\n  --intent \"按需求优化文档并发布\" \\\n  --context \"需保证提交信息对开源读者清晰\"",
+        standardsTitle: "Skill 标准自检",
+        standardsDesc: "该仓库已对齐当前常见 Skill 规范（结构化 frontmatter + 明确触发条件 + 可执行脚本 + 可验证测试）。",
+        standardsList: [
+          "`SKILL.md` 包含 `name` 与 `description`，触发条件清晰。",
+          "`scripts/auto-commit.sh` 提供可复用、可执行实现。",
+          "`tests/*.sh` 覆盖提交描述、意图上下文和关键词映射。",
+          "文档补充中英双语入口，便于外部协作与分发。"
+        ],
+        notesTitle: "建议发布方式",
+        notesDesc: "面向他人使用时，推荐把此仓库作为独立项目发布，并启用 GitHub Pages 展示本页面。",
+        notesList: [
+          "创建 `git@github.com:<your-account>/commit-assistant.git` 仓库并推送。",
+          "在仓库设置中启用 GitHub Pages（root/docs）。",
+          "在 README 中放置文档链接与最小命令示例。"
+        ],
+        footer: "Language toggle available on this page."
+      },
+      en: {
+        badge: "Codex Skill Documentation",
+        title: "commit-assistant",
+        subtitle: "Generate Conventional Commits and open-source style commit bodies (Why / What changed / Impact) from staged diffs, user intent, and conversation constraints.",
+        installTitle: "Installation",
+        installDesc: "Copy this repository into your local skills directory and ensure the script is executable.",
+        installCode: "mkdir -p ~/.codex/skills\ncp -R commit-assistant ~/.codex/skills/\nchmod +x ~/.codex/skills/commit-assistant/scripts/auto-commit.sh",
+        usageTitle: "Quick Usage",
+        usageDesc: "Use dry-run first to preview the commit message, then run a real commit and push.",
+        usageCode: "scripts/auto-commit.sh --dry-run --no-push \\\n  --intent \"Improve documentation and publish\" \\\n  --context \"Commit body should be clear for OSS maintainers\"",
+        standardsTitle: "Skill Standards Check",
+        standardsDesc: "This repo is aligned with common current skill expectations: structured frontmatter, clear trigger conditions, executable scripts, and verifiable tests.",
+        standardsList: [
+          "`SKILL.md` includes both `name` and `description` with clear trigger conditions.",
+          "`scripts/auto-commit.sh` provides deterministic, reusable behavior.",
+          "`tests/*.sh` cover description quality, intent/context flow, and keyword mapping.",
+          "Bilingual docs with a page-level language switch are now provided for external users."
+        ],
+        notesTitle: "Recommended Publishing Flow",
+        notesDesc: "For public use, publish this repository as a standalone project and enable GitHub Pages for this document.",
+        notesList: [
+          "Create `git@github.com:<your-account>/commit-assistant.git` and push this repo.",
+          "Enable GitHub Pages in repo settings (root/docs).",
+          "Keep README focused on docs link plus minimal command examples."
+        ],
+        footer: "You can switch language any time with the top-right buttons."
+      }
+    };
+
+    const refs = {
+      badge: document.getElementById("badge"),
+      title: document.getElementById("title"),
+      subtitle: document.getElementById("subtitle"),
+      installTitle: document.getElementById("install-title"),
+      installDesc: document.getElementById("install-desc"),
+      installCode: document.getElementById("install-code"),
+      usageTitle: document.getElementById("usage-title"),
+      usageDesc: document.getElementById("usage-desc"),
+      usageCode: document.getElementById("usage-code"),
+      standardsTitle: document.getElementById("standards-title"),
+      standardsDesc: document.getElementById("standards-desc"),
+      standardsList: document.getElementById("standards-list"),
+      notesTitle: document.getElementById("notes-title"),
+      notesDesc: document.getElementById("notes-desc"),
+      notesList: document.getElementById("notes-list"),
+      footer: document.getElementById("footer")
+    };
+
+    const btnZh = document.getElementById("btn-zh");
+    const btnEn = document.getElementById("btn-en");
+
+    function setList(node, items) {
+      node.innerHTML = "";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = item;
+        node.appendChild(li);
+      });
+    }
+
+    function render(lang) {
+      const data = I18N[lang];
+      refs.badge.textContent = data.badge;
+      refs.title.textContent = data.title;
+      refs.subtitle.textContent = data.subtitle;
+      refs.installTitle.textContent = data.installTitle;
+      refs.installDesc.textContent = data.installDesc;
+      refs.installCode.textContent = data.installCode;
+      refs.usageTitle.textContent = data.usageTitle;
+      refs.usageDesc.textContent = data.usageDesc;
+      refs.usageCode.textContent = data.usageCode;
+      refs.standardsTitle.textContent = data.standardsTitle;
+      refs.standardsDesc.textContent = data.standardsDesc;
+      refs.notesTitle.textContent = data.notesTitle;
+      refs.notesDesc.textContent = data.notesDesc;
+      refs.footer.textContent = data.footer;
+      setList(refs.standardsList, data.standardsList);
+      setList(refs.notesList, data.notesList);
+
+      const isZh = lang === "zh";
+      btnZh.classList.toggle("active", isZh);
+      btnEn.classList.toggle("active", !isZh);
+      btnZh.setAttribute("aria-selected", String(isZh));
+      btnEn.setAttribute("aria-selected", String(!isZh));
+      document.documentElement.lang = isZh ? "zh-CN" : "en";
+    }
+
+    btnZh.addEventListener("click", () => render("zh"));
+    btnEn.addEventListener("click", () => render("en"));
+    render("zh");
+  </script>
+</body>
+</html>

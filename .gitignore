@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Shell temp
+*.swp
+*.swo
+
+# Local test artifacts
+/tmp-commit-assistant-*
