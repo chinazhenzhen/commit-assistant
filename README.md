@@ -4,11 +4,6 @@
 
 `commit-assistant` 是一个面向 Codex / Claude Code 的 Skill，配套 `scripts/auto-commit.sh`，用于根据已暂存 diff、用户意图与会话约束，生成高质量 Conventional Commit 与开源风格提交说明（`Why / What changed / Impact`）。
 
-## 文档结构
-
-- 当前仓库以 `README.md`（中文）和 `README_EN.md`（英文）作为唯一文档入口。
-- 顶部语言切换使用 GitHub 可见的双 README 链接方式。
-
 ## 安装到 Codex
 
 根据 OpenAI Codex Skills 文档，推荐路径是 `.agents/skills`。
