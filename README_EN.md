@@ -5,9 +5,10 @@
 `commit-assistant` is a Skill for Codex / Claude Code with a companion script (`scripts/auto-commit.sh`).
 It generates Conventional Commits and OSS-friendly commit bodies (`Why / What changed / Impact`) from staged diffs, user intent, and conversation context.
 
-## Documentation
+## Documentation Layout
 
-- Web-style docs with language switch: [docs/index.html](docs/index.html)
+- This repository uses `README.md` (Chinese) and `README_EN.md` (English) as the only documentation entry points.
+- Language switching is implemented with cross-links at the top of both files, which is fully visible on GitHub.
 
 ## Install in Codex
 
