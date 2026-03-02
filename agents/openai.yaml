@@ -1,0 +1,7 @@
+interface:
+  display_name: "Commit Assistant"
+  short_description: "Generate intent-aware conventional commits from staged diffs"
+  default_prompt: "Use $commit-assistant to create a conventional commit from my staged changes with a clear Why/What changed/Impact body."
+
+policy:
+  allow_implicit_invocation: true
