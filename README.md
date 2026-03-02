@@ -33,6 +33,15 @@ Then use prompts like:
 - "帮我自动提交这次改动"
 - "Generate a conventional commit from staged changes"
 
+## Skill Standards Check
+
+This repository is aligned with current practical skill expectations:
+
+- `SKILL.md` with trigger-focused `name` + `description` frontmatter
+- executable `scripts/auto-commit.sh` for deterministic behavior
+- `tests/*.sh` for behavior validation
+- `agents/openai.yaml` for UI-facing metadata and default prompt
+
 ## 中文简介
 
 `commit-assistant` 是一个 Codex skill，配套 `scripts/auto-commit.sh`，用于基于已暂存改动自动生成规范化提交信息，并输出开源风格提交说明（`Why / What changed / Impact`）。
