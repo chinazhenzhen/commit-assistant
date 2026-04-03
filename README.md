@@ -27,7 +27,7 @@ git clone git@github.com:chinazhenzhen/commit-assistant.git .agents/skills/commi
 ### 3. 验证
 
 - 在 Codex 中输入 `/skills` 查看是否已加载
-- 显式调用：`$commit-assistant 帮我基于已暂存改动生成 commit，先 dry-run`
+- 显式调用：`$commit-assistant 帮我基于已暂存改动直接生成并执行 commit`
 - 如果没有立即出现，重启 Codex
 
 ### 兼容说明
@@ -61,18 +61,28 @@ git clone git@github.com:chinazhenzhen/commit-assistant.git .claude/skills/commi
 
 ## 使用示例
 
-先预览：
+默认直接提交并推送：
 
 ```bash
-scripts/auto-commit.sh --dry-run --no-push \
+scripts/auto-commit.sh \
   --intent "修复登录死循环并补充错误提示" \
   --context "线上稳定性优先，需要回归验证说明"
 ```
 
-确认后执行实际提交：
+仅在你明确需要预览时再 dry-run：
 
 ```bash
-scripts/auto-commit.sh --no-push
+scripts/auto-commit.sh --dry-run \
+  --intent "修复登录死循环并补充错误提示" \
+  --context "线上稳定性优先，需要回归验证说明"
+```
+
+只想本地提交时显式加 `--no-push`：
+
+```bash
+scripts/auto-commit.sh --no-push \
+  --intent "修复登录死循环并补充错误提示" \
+  --context "线上稳定性优先，需要回归验证说明"
 ```
 
 ## Skill 标准对齐

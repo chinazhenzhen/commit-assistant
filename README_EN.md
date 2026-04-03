@@ -33,7 +33,7 @@ git clone git@github.com:chinazhenzhen/commit-assistant.git .agents/skills/commi
 ### 3. Verify
 
 - Run `/skills` in Codex and confirm it is listed
-- Explicitly invoke: `$commit-assistant generate a commit from staged changes, dry-run first`
+- Explicitly invoke: `$commit-assistant generate and execute a commit directly from staged changes`
 - Restart Codex if it does not show up immediately
 
 ### Compatibility note
@@ -67,18 +67,28 @@ git clone git@github.com:chinazhenzhen/commit-assistant.git .claude/skills/commi
 
 ## Usage Example
 
-Preview first:
+Direct commit and push by default:
 
 ```bash
-scripts/auto-commit.sh --dry-run --no-push \
+scripts/auto-commit.sh \
   --intent "Fix retry loop and improve error feedback" \
   --context "Production stability first with clear regression notes"
 ```
 
-Then run a real commit:
+Use preview mode only when the user explicitly asks for it:
 
 ```bash
-scripts/auto-commit.sh --no-push
+scripts/auto-commit.sh --dry-run \
+  --intent "Fix retry loop and improve error feedback" \
+  --context "Production stability first with clear regression notes"
+```
+
+Add `--no-push` only when the user explicitly wants a local-only commit:
+
+```bash
+scripts/auto-commit.sh --no-push \
+  --intent "Fix retry loop and improve error feedback" \
+  --context "Production stability first with clear regression notes"
 ```
 
 ## Standards Alignment

@@ -18,7 +18,7 @@ Options:
   --context-file PATH Read conversation context from file
   --no-auto-body      Disable auto-generated open-source style body
   --no-verify         Pass --no-verify to git commit
-  --push              Force push after commit (default behavior)
+  --push              Push after commit (default behavior)
   --no-push           Disable push after commit
   --remote REMOTE     Push to specific remote
   --branch BRANCH     Push to specific branch (default: current branch)

@@ -20,6 +20,16 @@ Do not use when:
 - The user only asks for a draft message and explicitly does not want an actual commit.
 - The repository has no staged changes and the user does not want `--all`.
 
+## Autonomous execution policy
+
+- Do not ask the user to confirm a dry run, message preview, or commit execution when they already asked to commit.
+- Do not ask whether you should inspect staged changes, infer commit fields, or run the script. Those are part of the skill.
+- Default to commit-and-push automation.
+- Treat normal commit and push operations as pre-authorized when the user asks to commit changes with this skill.
+- Only pause for confirmation when the next action is genuinely high-risk, such as force-push, history rewrite, branch deletion, destructive reset, or pushing to an unclear target.
+- Use `--dry-run` only when the user explicitly asks to preview, review, or draft the commit message without creating the commit.
+- Ask a follow-up only when automation is blocked by missing staged changes, missing git identity, or an unresolved push target that cannot be inferred safely.
+
 ## Workflow (intent + diff first)
 
 1. Load conversation context first:
@@ -32,17 +42,20 @@ Do not use when:
 3. Inspect staged changes (`git diff --cached --name-status` and key hunks) to confirm what actually changed.
 4. Generate Conventional Commit `type/scope/subject` that matches intent + context + diff evidence.
 5. Generate open-source style description (`Why / What changed / Impact`).
-6. Run `scripts/auto-commit.sh --dry-run` first, then run without `--dry-run` after message quality is acceptable.
-7. Push by default unless the user requests otherwise.
+6. Run `scripts/auto-commit.sh` directly for actual commits.
+7. Add `--dry-run` only for preview-only requests.
+8. Let the script push by default for normal automation.
+9. Add `--no-push` only when the user explicitly wants a local-only commit.
 
 If conversation intent and staged diff conflict, prioritize actual staged code and call out the mismatch.
 
 ## Validation checklist
 
 - Confirm staged files are not empty before commit.
-- Run `--dry-run` first for message review.
+- Do not insert a preview/confirmation step unless the user asked for one.
 - Ensure the final body contains `Why / What changed / Impact`.
-- Push by default unless the user says not to.
+- Treat normal push as part of the default execution path.
+- Stop only for high-risk git operations or an unresolved push destination.
 
 ## Script
 
@@ -67,7 +80,7 @@ Options:
 - `COMMIT_ASSISTANT_CONTEXT` (env) fallback context source
 - `--no-auto-body` disable auto-generated open-source style body
 - `--no-verify` pass through to `git commit`
-- `--push` force push after commit (default behavior)
+- `--push` explicitly enable push after commit (matches default behavior)
 - `--no-push` disable push after commit
 - `--remote <name>` push to a specific remote
 - `--branch <name>` push to a specific branch
@@ -76,25 +89,30 @@ Options:
 
 ## Recommended invocation
 
-Prefer explicit commit fields when confidence is high:
+For the normal automatic path, commit and push directly without a preview round trip:
 
 ```bash
 scripts/auto-commit.sh \
-  --type fix \
-  --scope auth \
-  --subject "prevent infinite retry loop in login flow" \
-  --body "<structured Why/What changed/Impact>" \
-  --no-push
+  --intent "修复登录重试导致死循环并补充错误提示" \
+  --context "线上稳定性优先，需要回归验证说明"
 ```
 
-When you want script-assisted inference, always pass intent context:
+When the user only wants a preview, switch to `--dry-run`:
 
 ```bash
 scripts/auto-commit.sh \
   --dry-run \
-  --no-push \
   --intent "修复登录重试导致死循环并补充错误提示" \
   --context "用户反馈线上频繁超时，需要优先稳定性并说明回归验证范围"
+```
+
+When the user explicitly wants a local-only commit, add `--no-push`:
+
+```bash
+scripts/auto-commit.sh \
+  --no-push \
+  --intent "修复登录重试导致死循环并补充错误提示" \
+  --context "线上稳定性优先，需要回归验证说明"
 ```
 
 ## Open-source description standard
@@ -138,10 +156,11 @@ Impact:
 
 ## Default behavior
 
+- If the user asks to create a commit, treat that as authorization to inspect staged changes and run the commit end-to-end.
 - If no `--type` is provided, the script infers from `--intent + --context` first, then falls back to changed-file heuristics.
 - If no `--subject` is provided, the script generates one from intent/context (when available), otherwise from staged files.
 - If no `--body` is provided, the script auto-generates `Why/What changed/Impact` and includes intent/context when provided.
-- After commit, the script pushes automatically. Use `--no-push` to skip.
+- After commit, the script pushes by default. Use `--no-push` when the user explicitly wants to keep it local.
 
 ## Typical prompts that should trigger this skill
 
